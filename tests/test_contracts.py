@@ -46,8 +46,8 @@ def minimal_template_spec(**overrides) -> dict:
 def minimal_template_file(**overrides) -> dict:
     data = minimal_template_spec()
     data["parameters"] = {
-        "base": {"type": "int", "min": 1, "max": 50},
-        "height": {"type": "int", "min": 1, "max": 50},
+        "base": {"type": "int", "min": 1, "max": 50, "step": 1},
+        "height": {"type": "int", "min": 1, "max": 50, "step": 1},
     }
     data.update(overrides)
     return data
