@@ -119,9 +119,9 @@ from core.problem_generator import ProblemGenerator
 
 class BrokenGenerator(ProblemGenerator):
     def sample_parameters(self, rng):
-        # varies x (and therefore problem_text) so the duplicate check
-        # doesn't also fire, but compute_solution ignores x entirely ->
-        # final_answer never varies.
+        # varies x (and therefore problem_text via text_variant) so the
+        # duplicate check doesn't also fire, but compute_solution ignores
+        # x entirely -> final_answer never varies.
         return {"x": self._sample_discrete(rng, "x")}
 
     def compute_solution(self, params):
