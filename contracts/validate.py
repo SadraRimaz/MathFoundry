@@ -37,6 +37,14 @@ def check_placeholders_match_parameters(template_file: TemplateFile) -> list[str
     Compare {name} placeholders used across problem_text_templates against
     the declared parameters. Returns a list of mismatch descriptions
     (empty list means everything agrees).
+
+    A placeholder with no matching parameter is always a mismatch — text
+    should never reference an ungrounded name.
+
+    A parameter with no matching placeholder is only a mismatch when
+    has_image is False. When has_image is True, a template may legitimately
+    have parameters that are communicated through the rendered image rather
+    than restated in problem_text (e.g. a figure's dimensions).
     """
     placeholder_names: set[str] = set()
     for text in template_file.problem_text_templates:
@@ -51,9 +59,10 @@ def check_placeholders_match_parameters(template_file: TemplateFile) -> list[str
         mismatches.append(
             f"placeholder '{name}' used in problem_text_templates but not declared in parameters"
         )
-    for name in sorted(parameter_names - placeholder_names):
-        mismatches.append(
-            f"parameter '{name}' declared but never used in any problem_text_templates"
-        )
+    if not template_file.has_image:
+        for name in sorted(parameter_names - placeholder_names):
+            mismatches.append(
+                f"parameter '{name}' declared but never used in any problem_text_templates"
+            )
 
     return mismatches

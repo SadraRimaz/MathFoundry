@@ -145,9 +145,21 @@ class TestTemplateFileContract(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_template_file(data)
 
-    def test_parameter_never_referenced_raises(self):
+    def test_unused_parameter_ok_when_has_image_true(self):
+        # has_image: True (from minimal_template_file's default) means an
+        # unmatched parameter is assumed to be conveyed by the image, not
+        # an error.
         data = minimal_template_file()
-        data["parameters"]["unused_param"] = {"type": "int", "min": 1, "max": 10}
+        data["parameters"]["unused_param"] = {
+            "type": "int", "min": 1, "max": 10, "step": 1,
+        }
+        validate_template_file(data)  # should not raise
+
+    def test_unused_parameter_raises_when_has_image_false(self):
+        data = minimal_template_file(has_image=False)
+        data["parameters"]["unused_param"] = {
+            "type": "int", "min": 1, "max": 10, "step": 1,
+        }
         with self.assertRaises(ValueError):
             validate_template_file(data)
 
@@ -157,14 +169,13 @@ class TestTemplateFileContract(unittest.TestCase):
         self.assertEqual(mismatches, [])
 
     def test_check_placeholders_match_parameters_directly_mismatch(self):
-        data = minimal_template_file()
+        # has_image=False here so the "unused parameter" direction is
+        # actually enforced (see has_image=True case tested separately).
+        data = minimal_template_file(has_image=False)
         data["problem_text_templates"] = ["Base {base} only, no height used."]
         template_file = TemplateFile.model_validate(data)
         mismatches = check_placeholders_match_parameters(template_file)
 
-        # both directions of mismatch should be represented:
-        # 'height' declared but unused, and nothing missing from parameters
-        # in this direction (base is fine), so just check height is flagged.
         self.assertTrue(any("height" in m for m in mismatches))
 
 
