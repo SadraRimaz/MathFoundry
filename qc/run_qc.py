@@ -28,12 +28,9 @@ def run_qc(template_path: str, n: int = 100, seed: int = 0) -> dict:
             },
         }
 
-    # Loaded separately from generate()'s own internal load, since
-    # generate() doesn't expose the TemplateFile it used. Small accepted
-    # duplication rather than changing generate()'s signature.
     template_file = load_template_file(template_path)
 
-    duplicates = check_exact_duplicates(instances)
+    duplicates = check_exact_duplicates(instances, template_file)
     answer_diversity = check_answer_diversity(instances, template_file.answer_type)
     parameter_range_coverage = check_parameter_range_coverage(instances, template_file)
     template_distribution = check_template_distribution(instances, template_file)

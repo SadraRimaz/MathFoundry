@@ -9,19 +9,35 @@ RANGE_COVERAGE_MIN_FRACTION = 0.70
 TEMPLATE_MAX_SHARE = 0.80
 
 
-def _answer_key(final_answer) -> str:
-    """Hashable key for a final_answer, which may be a list (vector/matrix)."""
-    return json.dumps(final_answer, sort_keys=True)
+def _hashable_key(value) -> str:
+    """Hashable JSON key for a value that may be unhashable (list, dict) —
+    used for both final_answer (vector/matrix) and sampled_params."""
+    return json.dumps(value, sort_keys=True)
 
 
-def check_exact_duplicates(instances: list[dict]) -> dict:
+def check_exact_duplicates(instances: list[dict], template_file: TemplateFile) -> dict:
     """
-    Exact duplicates: same (problem_text, final_answer) pair.
-    Threshold: 0 tolerated (spec.md Section 5).
+    Exact duplicates. Threshold: 0 tolerated (spec.md Section 5).
+
+    Key depends on has_image:
+    - has_image=False: (problem_text, final_answer) — text is the actual
+      content, exactly as spec.md defines it.
+    - has_image=True: (sampled_params, final_answer) instead. The image
+      itself is not inspected (out of scope — no image comparison), and
+      problem_text is typically fixed/near-fixed caption text carrying no
+      discriminating information for these templates, so using it as part
+      of the duplicate key would under-detect (or, as observed, flag
+      coincidental non-duplicates: different sampled_params that happen to
+      share phrasing and final_answer). sampled_params is the actual
+      varying content for an image-driven template.
     """
     seen: dict[tuple, list[str]] = {}
     for instance in instances:
-        key = (instance["problem_text"], _answer_key(instance["final_answer"]))
+        if template_file.has_image:
+            content_key = _hashable_key(instance["sampled_params"])
+        else:
+            content_key = instance["problem_text"]
+        key = (content_key, _hashable_key(instance["final_answer"]))
         seen.setdefault(key, []).append(instance["id"])
 
     duplicate_ids = [ids for ids in seen.values() if len(ids) > 1]
@@ -48,7 +64,7 @@ def check_answer_diversity(instances: list[dict], answer_type: str) -> dict:
         }
 
     n = len(instances)
-    unique_count = len({_answer_key(inst["final_answer"]) for inst in instances})
+    unique_count = len({_hashable_key(inst["final_answer"]) for inst in instances})
     unique_fraction = unique_count / n if n else 0.0
 
     return {

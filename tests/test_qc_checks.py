@@ -29,39 +29,78 @@ def make_template_file(**overrides) -> TemplateFile:
 class TestCheckExactDuplicates(unittest.TestCase):
 
     def test_no_duplicates_passes(self):
+        template_file = make_template_file(has_image=False)
         instances = [
-            {"id": "1", "problem_text": "A", "final_answer": 1},
-            {"id": "2", "problem_text": "B", "final_answer": 2},
+            {"id": "1", "problem_text": "A", "final_answer": 1, "sampled_params": {}},
+            {"id": "2", "problem_text": "B", "final_answer": 2, "sampled_params": {}},
         ]
-        result = check_exact_duplicates(instances)
+        result = check_exact_duplicates(instances, template_file)
         self.assertTrue(result["passed"])
         self.assertEqual(result["duplicate_count"], 0)
 
-    def test_one_duplicate_pair_fails(self):
+    def test_one_duplicate_pair_fails_no_image(self):
+        template_file = make_template_file(has_image=False)
         instances = [
-            {"id": "1", "problem_text": "A", "final_answer": 1},
-            {"id": "2", "problem_text": "A", "final_answer": 1},
-            {"id": "3", "problem_text": "B", "final_answer": 2},
+            {"id": "1", "problem_text": "A", "final_answer": 1, "sampled_params": {}},
+            {"id": "2", "problem_text": "A", "final_answer": 1, "sampled_params": {}},
+            {"id": "3", "problem_text": "B", "final_answer": 2, "sampled_params": {}},
         ]
-        result = check_exact_duplicates(instances)
+        result = check_exact_duplicates(instances, template_file)
         self.assertFalse(result["passed"])
         self.assertEqual(result["duplicate_count"], 1)
         self.assertIn(["1", "2"], result["duplicate_groups"])
 
-    def test_same_text_different_answer_not_duplicate(self):
+    def test_same_text_different_answer_not_duplicate_no_image(self):
+        template_file = make_template_file(has_image=False)
         instances = [
-            {"id": "1", "problem_text": "A", "final_answer": 1},
-            {"id": "2", "problem_text": "A", "final_answer": 999},
+            {"id": "1", "problem_text": "A", "final_answer": 1, "sampled_params": {}},
+            {"id": "2", "problem_text": "A", "final_answer": 999, "sampled_params": {}},
         ]
-        result = check_exact_duplicates(instances)
+        result = check_exact_duplicates(instances, template_file)
         self.assertTrue(result["passed"])
 
-    def test_vector_final_answer_duplicate_detected(self):
+    def test_vector_final_answer_duplicate_detected_no_image(self):
+        template_file = make_template_file(has_image=False)
         instances = [
-            {"id": "1", "problem_text": "A", "final_answer": [1.0, 2.0]},
-            {"id": "2", "problem_text": "A", "final_answer": [1.0, 2.0]},
+            {"id": "1", "problem_text": "A", "final_answer": [1.0, 2.0], "sampled_params": {}},
+            {"id": "2", "problem_text": "A", "final_answer": [1.0, 2.0], "sampled_params": {}},
         ]
-        result = check_exact_duplicates(instances)
+        result = check_exact_duplicates(instances, template_file)
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["duplicate_count"], 1)
+
+    def test_has_image_true_keys_on_sampled_params_not_text(self):
+        # Same fixed caption text and same final_answer, but genuinely
+        # different sampled_params (e.g. different figures) — must NOT be
+        # flagged as a duplicate when has_image=True.
+        template_file = make_template_file(has_image=True)
+        instances = [
+            {
+                "id": "1", "problem_text": "Find the area shown.",
+                "final_answer": 68.0, "sampled_params": {"base": 4, "height": 34},
+            },
+            {
+                "id": "2", "problem_text": "Find the area shown.",
+                "final_answer": 68.0, "sampled_params": {"base": 8, "height": 17},
+            },
+        ]
+        result = check_exact_duplicates(instances, template_file)
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["duplicate_count"], 0)
+
+    def test_has_image_true_still_flags_identical_sampled_params(self):
+        template_file = make_template_file(has_image=True)
+        instances = [
+            {
+                "id": "1", "problem_text": "Find the area shown.",
+                "final_answer": 68.0, "sampled_params": {"base": 4, "height": 34},
+            },
+            {
+                "id": "2", "problem_text": "Find the area shown.",
+                "final_answer": 68.0, "sampled_params": {"base": 4, "height": 34},
+            },
+        ]
+        result = check_exact_duplicates(instances, template_file)
         self.assertFalse(result["passed"])
         self.assertEqual(result["duplicate_count"], 1)
 
