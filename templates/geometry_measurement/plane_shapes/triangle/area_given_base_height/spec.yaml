@@ -1,0 +1,38 @@
+template_id: geometry-triangle-area-given-base-height-v1
+domain: geometry_measurement
+name: triangle-area-given-base-height
+
+description: >
+  Given a labeled figure of a triangle showing its base and height,
+  find the triangle's area. All numeric data is conveyed by the figure,
+  not by the problem text.
+
+has_image: true
+answer_type: numeric
+
+problem_text_templates:
+  - "Find the area of the triangle shown below."
+  - "What is the area of the triangle in the figure?"
+
+# apex_offset is a diversity knob, not stated anywhere in problem_text:
+# base and height alone don't fix the triangle's shape (infinitely many
+# triangles share a given base+height), so apex_offset varies where the
+# apex sits above the base (0 = above the left end, 1 = above the right
+# end) to keep rendered figures visually diverse without affecting the
+# area itself.
+parameters:
+  base:
+    type: int
+    min: 4
+    max: 40
+    step: 1
+  height:
+    type: int
+    min: 4
+    max: 40
+    step: 1
+  apex_offset:
+    type: float
+    min: 0.0
+    max: 1.0
+    step: 0.05
