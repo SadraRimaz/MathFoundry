@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from decimal import Decimal
 from random import Random
 from typing import Any
 
@@ -52,4 +53,7 @@ class ProblemGenerator(ABC):
 
         if param.type == "int":
             return int(round(value))
-        return value
+        # Round to the step's decimal precision to avoid float drift
+        # (e.g. 0.1 + 0.2 style accumulation) leaking into sampled_params.
+        decimals = max(0, -Decimal(str(param.step)).as_tuple().exponent)
+        return round(value, decimals)
