@@ -1,0 +1,44 @@
+template_id: linear-algebra-vectors-dot-product-work-done-v1
+domain: linear_algebra
+name: dot-product-work-done
+
+description: >
+  A constant force acts on an object as it undergoes a straight-line
+  displacement. Both the force and the displacement are given as 2D
+  component vectors (e.g. force in newtons, displacement in meters). The
+  learner computes the work done by the force using the dot product,
+  W = F . d.
+
+has_image: false
+answer_type: numeric
+
+problem_text_templates:
+  - "A constant force of ({force_x} N, {force_y} N) acts on an object as it undergoes a straight-line displacement of ({displacement_x} m, {displacement_y} m). Find the work done by the force using the dot product W = F . d."
+  - "An object experiences a constant force F = <{force_x}, {force_y}> N while moving along a straight-line displacement d = <{displacement_x}, {displacement_y}> m. Compute the work done, W = F . d."
+  - "A force vector F = ({force_x}, {force_y}) N is applied to an object that moves with displacement vector d = ({displacement_x}, {displacement_y}) m. What is the work done by the force?"
+
+# force_x/force_y and displacement_x/displacement_y are the flat scalar
+# decomposition of the force and displacement vectors (Parameter only
+# supports flat numeric ranges). sample_parameters additionally enforces
+# that neither vector is (0, 0) -- a constraint min/max/step can't express.
+parameters:
+  force_x:
+    type: int
+    min: -20
+    max: 20
+    step: 1
+  force_y:
+    type: int
+    min: -20
+    max: 20
+    step: 1
+  displacement_x:
+    type: int
+    min: -20
+    max: 20
+    step: 1
+  displacement_y:
+    type: int
+    min: -20
+    max: 20
+    step: 1

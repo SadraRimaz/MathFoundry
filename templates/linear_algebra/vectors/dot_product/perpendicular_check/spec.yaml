@@ -1,0 +1,39 @@
+template_id: linear-algebra-vectors-dot-product-perpendicular-check-v1
+domain: linear_algebra
+name: dot-product-perpendicular-check
+
+description: >
+  Given two vectors in component form — e.g. two hiking legs, or two
+  forces applied to an object — the learner determines whether the
+  vectors are perpendicular (orthogonal) by testing whether their dot
+  product equals zero.
+
+has_image: false
+answer_type: boolean
+
+problem_text_templates:
+  - "A hiker walks along a displacement vector of ({v1_x}, {v1_y}) km, then turns and walks along a second displacement vector of ({v2_x}, {v2_y}) km. Are the two legs of the hike perpendicular to each other?"
+  - "Two forces act on an object: F1 = ({v1_x}, {v1_y}) N and F2 = ({v2_x}, {v2_y}) N. Is F2 perpendicular to F1?"
+  - "Given vectors u = ({v1_x}, {v1_y}) and v = ({v2_x}, {v2_y}), determine whether u and v are perpendicular (orthogonal) to each other."
+
+parameters:
+  v1_x:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v1_y:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v2_x:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v2_y:
+    type: int
+    min: -15
+    max: 15
+    step: 1

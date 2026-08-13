@@ -1,0 +1,43 @@
+template_id: linear-algebra-vectors-dot-product-projection-v1
+domain: linear_algebra
+name: dot-product-projection
+
+description: >
+  Given two vectors — e.g. a rope's pull direction and a cart's direction
+  of travel — the learner finds the scalar projection of one vector onto
+  the other: how much of the first vector's effect acts along the second
+  vector's direction.
+
+has_image: false
+answer_type: numeric
+
+problem_text_templates:
+  - "A rope pulls a cart with a force vector of ({v1_x}, {v1_y}) N. The cart travels along a direction vector of ({v2_x}, {v2_y}). What is the scalar projection of the rope's force onto the cart's direction of travel?"
+  - "A hiker's displacement vector is ({v1_x}, {v1_y}) km. Find the scalar projection of this displacement onto a trail that runs along direction vector ({v2_x}, {v2_y})."
+  - "Given vectors u = ({v1_x}, {v1_y}) and v = ({v2_x}, {v2_y}), find the scalar projection of u onto v."
+
+# v1 != (0,0) and v2 != (0,0) are cross-parameter constraints the Parameter
+# contract can't express (v2=(0,0) makes the projection formula's
+# denominator zero; v1=(0,0) is a degenerate zero-effect instance) — both
+# enforced by rejection sampling in generator.py's sample_parameters.
+parameters:
+  v1_x:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v1_y:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v2_x:
+    type: int
+    min: -15
+    max: 15
+    step: 1
+  v2_y:
+    type: int
+    min: -15
+    max: 15
+    step: 1
