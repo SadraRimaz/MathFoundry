@@ -37,22 +37,47 @@ not implemented yet. `pipeline/` and `agents_stub/` contain the intended
 call shape as stub functions, so those pieces can be dropped in later
 without restructuring the core.
 
-## Reference template
+Nine templates have been implemented against this core, covering the
+three subdomains in execution scope — see [Templates](#templates) below.
 
-`templates/geometry_measurement/plane_shapes/triangle/area_given_base_height/`
-is a hand-authored, fully working template: given a rendered figure of a
-triangle with its base and height labeled, find the area. It is
-image-driven — the problem text carries no numeric placeholders, all
-values come from the figure — and includes a shape-only parameter so
-otherwise-identical base/height pairs still produce visually distinct
-figures. It has been run end to end through generation and QC and is used
-as the integration test for the core and QC modules.
+## Templates
 
-Two further template locations exist as placeholders, matching the
-project's execution scope, and are not yet implemented:
+Nine hand-authored, fully working templates exist, one per problem idea
+within each of the three in-scope subdomains (see `docs/taxonomy.md`).
+Each has been run end to end through generation and QC.
 
-- `templates/algebra/ratios_proportions/`
-- `templates/linear_algebra/vectors/`
+**Geometry → Plane Shapes → Triangle** (`has_image: true`, all numeric
+data conveyed by the rendered figure, not the problem text):
+
+- `triangle/area_given_base_height/` — area of a triangle given its base
+  and height. The reference template: it is the integration test for the
+  core and QC modules, and includes a shape-only parameter so
+  otherwise-identical base/height pairs still produce visually distinct
+  figures.
+- `triangle/area_given_three_sides/` — area of a triangle given its three
+  side lengths, via Heron's formula.
+- `triangle/perimeter_given_three_sides/` — perimeter of a triangle given
+  its three side lengths.
+
+**Algebra → Ratios & Proportions → Simple Ratio Word Problems**
+(`has_image: false`, numeric answers):
+
+- `simple_ratio_word_problems/divide_quantity_in_ratio/` — split a total
+  quantity between three parties according to a stated ratio.
+- `simple_ratio_word_problems/equivalent_ratio_unknown_term/` — solve
+  `a:b = c:x` for `x` from a real-world equivalent-ratio scenario.
+- `simple_ratio_word_problems/recipe_ratio_scaling/` — scale one
+  ingredient of a fixed-ratio recipe to match a new amount of another.
+
+**Linear Algebra → Vectors → Dot Product**:
+
+- `dot_product/perpendicular_check/` — determine whether two 2D vectors
+  are perpendicular by testing whether their dot product is zero
+  (`answer_type: boolean`).
+- `dot_product/projection/` — scalar projection of one 2D vector onto
+  another (`answer_type: numeric`).
+- `dot_product/work_done/` — work done by a constant force over a
+  straight-line displacement, `W = F . d` (`answer_type: numeric`).
 
 ## Running the tests
 
