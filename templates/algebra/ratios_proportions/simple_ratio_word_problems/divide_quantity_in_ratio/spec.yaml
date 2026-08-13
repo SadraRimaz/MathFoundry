@@ -1,0 +1,38 @@
+template_id: algebra-ratios-divide-quantity-in-ratio-v1
+domain: algebra
+name: divide-quantity-in-ratio
+
+description: >
+  A total quantity (money, distance, a collection of objects) must be
+  split between two or three parties according to a stated ratio. The
+  learner must find one party's share of the total.
+
+has_image: false
+answer_type: numeric
+
+problem_text_templates:
+  - "A total of {total} dollars is shared between three siblings, Ali, Sara, and Reza, in the ratio {part_a}:{part_b}:{part_c}. How much money does Sara receive?"
+  - "A plot of land covering {total} acres is divided among three farmers, Amir, Lena, and Omar, in the ratio {part_a}:{part_b}:{part_c}. How many acres does Lena receive?"
+  - "A charity donation of {total} kilograms of rice is split between three villages (Northtown, Midford, and Eastville) in the ratio {part_a}:{part_b}:{part_c}. How many kilograms does Midford receive?"
+
+parameters:
+  part_a:
+    type: int
+    min: 1
+    max: 15
+    step: 1
+  part_b:
+    type: int
+    min: 1
+    max: 15
+    step: 1
+  part_c:
+    type: int
+    min: 1
+    max: 15
+    step: 1
+  total:
+    type: int
+    min: 30
+    max: 300
+    step: 3

@@ -1,0 +1,34 @@
+template_id: algebra-ratios-recipe-ratio-scaling-v1
+domain: algebra
+name: recipe-ratio-scaling
+
+description: >
+  A recipe (or mix) lists two or three ingredients in a fixed ratio at a
+  stated batch size. The learner is given a new target amount for one
+  ingredient (or a new total number of batches) and must find the
+  resulting amount of another ingredient, keeping the ratio constant.
+
+has_image: false
+answer_type: numeric
+
+problem_text_templates:
+  - "A cookie recipe uses {orig_a} cups of flour and {orig_b} cups of sugar in a fixed ratio. If you want to use {new_a} cups of flour instead, how many cups of sugar do you need to keep the same ratio?"
+  - "A paint mixture combines {orig_a} liters of blue paint with {orig_b} liters of yellow paint. To mix a new batch using {new_a} liters of blue paint, how many liters of yellow paint are needed to keep the same ratio?"
+  - "A fruit punch recipe calls for {orig_a} cups of orange juice for every {orig_b} cups of soda. If a party needs {new_a} cups of orange juice, how many cups of soda should be added to keep the same ratio?"
+
+parameters:
+  orig_a:
+    type: int
+    min: 1
+    max: 20
+    step: 1
+  orig_b:
+    type: int
+    min: 1
+    max: 20
+    step: 1
+  new_a:
+    type: int
+    min: 1
+    max: 100
+    step: 1
