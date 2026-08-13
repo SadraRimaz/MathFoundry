@@ -1,0 +1,36 @@
+template_id: geometry-triangle-perimeter-given-three-sides-v1
+domain: geometry_measurement
+name: triangle-perimeter-given-three-sides
+
+description: >
+  Given a labeled figure of a triangle showing its three side lengths,
+  find the triangle's perimeter. All numeric data is conveyed by the
+  figure, not by the problem text.
+
+has_image: true
+answer_type: numeric
+
+problem_text_templates:
+  - "Find the perimeter of the triangle shown below."
+  - "What is the perimeter of the triangle in the figure?"
+
+# side_a/side_b are sampled unconstrained over the full declared range;
+# side_c is sampled (in generator.py) from the triangle-inequality-valid
+# window given side_a/side_b, since Parameter has no cross-parameter
+# constraint field.
+parameters:
+  side_a:
+    type: int
+    min: 5
+    max: 60
+    step: 1
+  side_b:
+    type: int
+    min: 5
+    max: 60
+    step: 1
+  side_c:
+    type: int
+    min: 5
+    max: 60
+    step: 1

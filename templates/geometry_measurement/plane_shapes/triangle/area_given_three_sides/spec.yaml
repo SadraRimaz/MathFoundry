@@ -1,0 +1,35 @@
+template_id: geometry-triangle-area-given-three-sides-v1
+domain: geometry_measurement
+name: triangle-area-given-three-sides
+
+description: >
+  Given a labeled figure of a triangle showing its three side lengths,
+  find the triangle's area using Heron's formula. All numeric data is
+  conveyed by the figure, not by the problem text.
+
+has_image: true
+answer_type: numeric
+
+problem_text_templates:
+  - "Find the area of the triangle shown below, given its three side lengths."
+  - "The triangle in the figure has the side lengths shown. What is its area?"
+
+# Triangle-inequality constraint (side_a + side_b > side_c, etc.) is a
+# cross-parameter constraint the Parameter contract can't express — it's
+# enforced by rejection sampling in generator.py's sample_parameters.
+parameters:
+  side_a:
+    type: int
+    min: 5
+    max: 60
+    step: 1
+  side_b:
+    type: int
+    min: 5
+    max: 60
+    step: 1
+  side_c:
+    type: int
+    min: 5
+    max: 60
+    step: 1
