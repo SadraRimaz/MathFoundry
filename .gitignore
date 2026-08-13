@@ -222,3 +222,4 @@ __marimo__/
 docs/initial
 claude-version
 output
+templates/**/_generated_images
